@@ -24,8 +24,6 @@ locals {
     [for resource in google_assured_workloads_workload.primary.resources : resource.resource_id
     if resource.resource_type == "CONSUMER_FOLDER"]
   )
-
-  current_allowed_restricted_services = data.google_folder_organization_policy.aw_policy_restrict_service_usage_current.list_policy[0].allow[0].values
 }
 
 resource "random_string" "suffix" {
@@ -60,27 +58,4 @@ resource "google_assured_workloads_workload" "primary" {
     resource_type = "KEYRING"
     resource_id   = local.keyring_id
   }
-}
-
-data "google_folder_organization_policy" "aw_policy_restrict_service_usage_current" {
-  folder     = "folders/${local.aw_consumer_folder_id}"
-  constraint = "constraints/gcp.restrictServiceUsage"
-}
-
-module "org-policy" {
-  source  = "terraform-google-modules/org-policy/google"
-  version = "~> 5.3"
-
-  constraint       = "constraints/gcp.restrictServiceUsage"
-  policy_type      = "list"
-  policy_for       = "folder"
-  folder_id        = local.aw_consumer_folder_id
-  enforce          = null
-  exclude_folders  = []
-  exclude_projects = []
-
-  allow             = setunion(local.current_allowed_restricted_services, var.new_allowed_restricted_services)
-  allow_list_length = 1
-
-  depends_on = [google_assured_workloads_workload.primary]
 }

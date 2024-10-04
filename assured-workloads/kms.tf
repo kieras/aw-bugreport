@@ -32,11 +32,8 @@ resource "google_kms_crypto_key" "hsm_encrypt_decrypt" {
     prevent_destroy = false
   }
 
-  dynamic "key_access_justifications_policy" {
-    for_each = var.cryptokey_allowed_access_reasons == null ? [] : ["1"]
-    content {
-      allowed_access_reasons = sort(var.cryptokey_allowed_access_reasons)
-    }
+  key_access_justifications_policy {
+    allowed_access_reasons = sort(var.cryptokey_allowed_access_reasons)
   }
 
   depends_on = [google_assured_workloads_workload.primary]

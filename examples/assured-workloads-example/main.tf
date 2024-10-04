@@ -23,18 +23,7 @@ module "assured_workloads" {
   aw_name              = "AW-Wkld-EX"
   aw_compliance_regime = "JP_REGIONS_AND_SUPPORT"
   aw_location          = "asia-northeast1"
-  new_allowed_restricted_services = [
-    "bigquery.googleapis.com",
-    "bigqueryconnection.googleapis.com",
-    "bigquerydatapolicy.googleapis.com",
-    "bigquerydatatransfer.googleapis.com",
-    "bigquerymigration.googleapis.com",
-    "bigqueryreservation.googleapis.com",
-    "bigquerystorage.googleapis.com",
-    "file.googleapis.com",
-    "networksecurity.googleapis.com"
-  ]
   cryptokey_allowed_access_reasons = [
-    "CUSTOMER_INITIATED_ACCESS"
+    # "CUSTOMER_INITIATED_ACCESS"
   ]
 }
